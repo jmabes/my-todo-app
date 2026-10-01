@@ -37,3 +37,13 @@ Interactive docs are served at `/docs`.
 pytest
 ruff check . && ruff format --check .
 ```
+
+## Static preview
+
+`scripts/build_preview.py` bundles the frontend into one self-contained
+`dist/preview.html` that runs without the Python server. It swaps the HTTP
+client for `preview/local-api.js`, which stores to-dos in the browser.
+
+```bash
+python scripts/build_preview.py
+```
