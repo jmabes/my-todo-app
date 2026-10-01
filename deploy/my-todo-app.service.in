@@ -1,5 +1,5 @@
-# systemd unit template. deploy/install.sh fills in @USER@ and @APP_DIR@
-# and installs the result to /etc/systemd/system/my-todo-app.service.
+# systemd unit template. deploy/install.sh fills in the user, app directory
+# and port, and installs the result to /etc/systemd/system/my-todo-app.service.
 [Unit]
 Description=my-todo-app (FastAPI to-do app)
 After=network-online.target
@@ -10,7 +10,7 @@ Type=simple
 User=@USER@
 WorkingDirectory=@APP_DIR@
 # The database lives outside the git checkout so deploys never touch it.
-# StateDirectory creates /var/lib/my-todo-app owned by @USER@.
+# StateDirectory creates /var/lib/my-todo-app owned by the service user.
 StateDirectory=my-todo-app
 Environment=TODO_DB_PATH=/var/lib/my-todo-app/todos.db
 ExecStart=@APP_DIR@/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port @PORT@

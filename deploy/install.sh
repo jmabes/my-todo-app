@@ -35,8 +35,7 @@ echo "==> Creating virtualenv and installing dependencies"
 .venv/bin/pip install --quiet --disable-pip-version-check -r requirements.txt
 
 echo "==> Installing systemd service to ${UNIT_PATH} (needs sudo)"
-sed -e "s|@USER@|$(id -un)|g" -e "s|@APP_DIR@|${APP_DIR}|g" -e "s|@PORT@|${PORT}|g" \
-  deploy/my-todo-app.service.in | sudo tee "$UNIT_PATH" >/dev/null
+render_unit "$(id -un)" "$APP_DIR" "$PORT" | sudo tee "$UNIT_PATH" >/dev/null
 sudo systemctl daemon-reload
 sudo systemctl enable --now "$SERVICE"
 sudo systemctl restart "$SERVICE"

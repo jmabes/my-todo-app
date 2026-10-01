@@ -45,7 +45,9 @@ After a pull request is merged into `main`:
 ```
 
 It pulls the latest `main`, updates dependencies, restarts the service, and
-waits until the app answers on its saved port. If the app fails to start, it prints the recent
+waits until the app answers on its saved port. If the update changed the
+service definition (`deploy/my-todo-app.service.in`), it reinstalls it first,
+keeping your user and port, so `deploy.sh` is the only command updates need. If the app fails to start, it prints the recent
 logs. The script refuses to run if files in the checkout were edited on the
 server, so a deploy never silently overwrites local changes.
 
