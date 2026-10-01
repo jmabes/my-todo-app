@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My To-Do App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- app:start -->
+<main class="app">
+  <header class="app-header">
+    <h1>To do</h1>
+    <p class="tally" id="tally" aria-live="polite"></p>
+  </header>
+
+  <p class="mode-note" id="mode-note" hidden></p>
+
+  <form class="add-form" id="add-form" novalidate>
+    <label class="visually-hidden" for="new-title">New to-do</label>
+    <input id="new-title" name="title" type="text" maxlength="200" autocomplete="off"
+           placeholder="Add a to-do and press Enter">
+    <button type="submit">Add</button>
+  </form>
+
+  <p class="error" id="error" role="alert" hidden></p>
+
+  <nav class="filters" aria-label="Filter to-dos">
+    <button type="button" data-filter="all" aria-pressed="true">All</button>
+    <button type="button" data-filter="active" aria-pressed="false">Open</button>
+    <button type="button" data-filter="completed" aria-pressed="false">Done</button>
+  </nav>
+
+  <ul class="todo-list" id="todo-list"></ul>
+  <p class="empty" id="empty" hidden></p>
+
+  <footer class="app-footer">
+    <button type="button" class="link-button" id="clear-completed" hidden>Clear done</button>
+  </footer>
+</main>
+<!-- app:end -->
+<script src="api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

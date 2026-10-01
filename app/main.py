@@ -3,14 +3,17 @@
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request, status
+from fastapi.staticfiles import StaticFiles
 
 from app.models import Todo, TodoCreate, TodoUpdate
 from app.storage import TodoStore
 
 DEFAULT_DB_PATH = "todos.db"
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
 
 def get_store(request: Request) -> TodoStore:
@@ -67,6 +70,8 @@ def create_app(db_path: str | None = None) -> FastAPI:
 
     app = FastAPI(title="To-do API", lifespan=lifespan)
     app.include_router(router)
+    # Mounted last so /api routes take precedence over static files.
+    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
     return app
 
 

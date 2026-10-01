@@ -67,3 +67,11 @@ def test_data_persists_across_restarts(tmp_path):
         c.post("/api/todos", json={"title": "survive"})
     with TestClient(create_app(db)) as c:
         assert [t["title"] for t in c.get("/api/todos").json()] == ["survive"]
+
+
+def test_serves_frontend(client):
+    res = client.get("/")
+    assert res.status_code == 200
+    assert "text/html" in res.headers["content-type"]
+    assert 'id="todo-list"' in res.text
+    assert client.get("/app.js").status_code == 200
