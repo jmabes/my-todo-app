@@ -10,14 +10,18 @@ permissions:
 
 jobs:
   test:
-    name: Lint and test
+    name: Lint and test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # 3.11 is the minimum in pyproject.toml; 3.12 matches the Ubuntu 24.04 server.
+        python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
           cache: pip
           cache-dependency-path: |
             requirements.txt
@@ -37,3 +41,6 @@ jobs:
 
       - name: Build preview
         run: python scripts/build_preview.py
+
+      - name: Check deploy scripts
+        run: for f in deploy/*.sh; do bash -n "$f"; done
