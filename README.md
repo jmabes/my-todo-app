@@ -19,6 +19,8 @@ uvicorn app.main:app --reload
 Then open http://localhost:8000. To-dos are stored in `todos.db`; set
 `TODO_DB_PATH` to use a different file.
 
+To run it on a home server as a service, see [deploy/README.md](deploy/README.md).
+
 ## API
 
 | Method   | Path                    | Description                      |
