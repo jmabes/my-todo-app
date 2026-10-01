@@ -1,0 +1,15 @@
+[project]
+name = "my-todo-app"
+version = "0.1.0"
+description = "A small to-do app with a FastAPI backend and a vanilla JS frontend."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
