@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
 # One-time server setup: creates the virtualenv, installs dependencies and
 # registers my-todo-app as a systemd service that starts on boot.
-# Safe to re-run. Usage: deploy/install.sh [port]   (default port 8000)
+# Safe to re-run. Usage: deploy/install.sh [port]
+# The port defaults to the one already installed, or 8000 on first install.
 set -euo pipefail
 
 APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-PORT="${1:-8000}"
-SERVICE=my-todo-app
-UNIT_PATH="/etc/systemd/system/${SERVICE}.service"
+# shellcheck source=deploy/common.sh
+source "$APP_DIR/deploy/common.sh"
+
+CURRENT_PORT="$(installed_port || true)"
+PORT="${1:-${CURRENT_PORT:-8000}}"
 
 cd "$APP_DIR"
+
+echo "==> Checking that port ${PORT} is free"
+# Our own running service may already hold the port on a re-install.
+if port_in_use "$PORT" && ! { [ "$PORT" = "$CURRENT_PORT" ] && systemctl is-active --quiet "$SERVICE"; }; then
+  echo "Port ${PORT} is already used by another program. Pick a free port, for example:" >&2
+  echo "  deploy/install.sh $(suggest_free_port)" >&2
+  exit 1
+fi
 
 echo "==> Checking that Python can create virtual environments"
 if ! python3 -m venv "$(mktemp -d)/probe" >/dev/null 2>&1; then
